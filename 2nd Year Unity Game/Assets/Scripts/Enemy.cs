@@ -24,7 +24,7 @@ public class Enemy : MonoBehaviour
     float waitTime;
 
     public float fireRate = 1f;
-    float nextFire = 5;
+    public float nextFire = 1f;
 
     Vector3 refVelocity = Vector3.zero;
 
@@ -37,6 +37,7 @@ public class Enemy : MonoBehaviour
         cone = transform.Find("TargetCone").gameObject;
         health = maxHealth;
 
+        transform.rotation = Quaternion.Euler(0,0,0);
 
         changingPosition = true;
         targetReached = false;
@@ -121,6 +122,7 @@ public class Enemy : MonoBehaviour
         if (health <= 0)
         {
             Destroy(gameObject);
+            GameObject.Find("GameManager").GetComponent<GameManager>().AddScore(10);
         }
     }
 

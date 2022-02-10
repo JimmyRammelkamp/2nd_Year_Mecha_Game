@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
     public float ammo = 100;
     public float health = 100;
 
+    public float leanAngle = 15;
+
     Rigidbody body;
 
     private void Awake()
@@ -25,7 +27,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        transform.eulerAngles = new Vector3(0, 90, 0);
     }
 
     // Update is called once per frame
@@ -60,7 +62,9 @@ public class PlayerController : MonoBehaviour
                 new Vector3(playerInput.x, playerInput.y, playerInput.z) * maxSpeed;
         }
 
-        transform.rotation = Quaternion.Euler(0,Camera.main.transform.eulerAngles.y,0);
+        transform.rotation = Quaternion.Euler(playerInput.z * 15, Camera.main.transform.eulerAngles.y, playerInput.x * -15);
+
+     
 
         velocity = body.velocity;
         float maxSpeedChange = maxAcceleration * Time.deltaTime;
@@ -74,9 +78,13 @@ public class PlayerController : MonoBehaviour
         Vector3 displacement = velocity * Time.deltaTime;
         transform.localPosition += displacement;
 
-        if (health < 0) health = 0;
-        if (health <= 0) Destroy(gameObject);
 
+        if (health < 0) health = 0;
+        if (health <= 0)
+        {
+            Destroy(gameObject);
+            GameObject.Find("UIManager").GetComponent<UIManager>().Gameover();
+        }
     }
 
     private void OnTriggerEnter(Collider collision)
